@@ -11,31 +11,51 @@ A FastAPI-based web application for uploading images, labeling them, and trainin
 
 ## 🚀 Features
 
-- **Image Upload & Labeling**: Upload images with automatic or manual labeling
-- **CNN Model Training**: Train custom image classification models locally
-- **Real-time Predictions**: Test trained models with new images
-- **Training Progress Tracking**: Monitor model training status in real-time
-- **Image Matching System**: Compare predictions with training data
-- **Database Integration**: MySQL database for storing images, labels, and models
-- **Modern UI**: React frontend with TypeScript and Tailwind CSS
-- **RESTful API**: FastAPI backend with automatic documentation
+### **Core ML Capabilities**
+- **Image Upload & Labeling**: Drag-and-drop interface with automatic or manual labeling
+- **CNN Model Training**: Train custom image classification models locally with real-time progress
+- **Smart Predictions**: Test models with confidence scores and similarity matching
+- **Image Carousel Viewer**: Browse training images with single/multi-image modal display
+- **Advanced Search & Filtering**: Search models by name, path, classes, or status
+
+### **User Experience**
+- **Authentication System**: User login/signup with profile management and avatar support
+- **Interactive Documentation**: Built-in API documentation with responsive sidebar navigation
+- **Real-time Status**: Live training progress tracking with polling updates
+- **Toast Notifications**: Comprehensive feedback system with close controls
+- **Responsive Design**: Mobile-friendly interface with skeleton loading states
+
+### **Technical Architecture**
+- **Modular Backend**: Clean separation of concerns with services and routes
+- **Database Integration**: MySQL with trained/uploaded data management
+- **RESTful API**: FastAPI with automatic OpenAPI documentation
+- **Modern Frontend**: React 19 with TypeScript, Tailwind CSS, and Framer Motion
 
 ## 📁 Project Structure
 
 ```
-local-vision-ml-image-classifier/
+automation-microservice-image-recognition/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml               # GitHub Actions CI/CD
 ├── backend/
 │   ├── app/
 │   │   ├── __init__.py
-│   │   ├── main.py              # FastAPI application
+│   │   ├── main.py              # FastAPI app setup (22 lines)
+│   │   ├── config.py            # Centralized configuration
 │   │   ├── db.py                # Database operations
 │   │   ├── predict.py           # Model prediction logic
-│   │   ├── train.py             # Model training logic
 │   │   ├── image_matcher.py     # Image matching system
-│   │   └── utils.py             # Utility functions
+│   │   ├── services/            # Business logic layer
+│   │   │   ├── __init__.py
+│   │   │   ├── file_service.py  # File handling operations
+│   │   │   └── training_service.py # ML training logic
+│   │   └── routes/              # API endpoint modules
+│   │       ├── __init__.py
+│   │       ├── upload_routes.py # Image upload endpoints
+│   │       ├── prediction_routes.py # Inference endpoints
+│   │       ├── training_routes.py # Training management
+│   │       └── data_routes.py   # Data retrieval endpoints
 │   ├── dataset/
 │   │   └── train/               # Training images directory
 │   ├── model/                   # Trained models storage
@@ -47,14 +67,21 @@ local-vision-ml-image-classifier/
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── UploadForm.tsx   # Image upload component
+│   │   │   ├── UploadForm.tsx   # Image upload with preview
 │   │   │   ├── PredictForm.tsx  # Model testing component
-│   │   │   ├── ModelsList.tsx   # Training data management
-│   │   │   └── Navbar.tsx       # Navigation component
+│   │   │   ├── ModelsList.tsx   # Advanced model management
+│   │   │   ├── Navbar.tsx       # Navigation component
+│   │   │   ├── LoginForm.tsx    # User authentication
+│   │   │   ├── SignupForm.tsx   # User registration
+│   │   │   ├── UserAvatar.tsx   # Profile dropdown
+│   │   │   ├── ProfilePage.tsx  # User profile management
+│   │   │   ├── SettingsPage.tsx # Application settings
+│   │   │   └── SkeletonLoader.tsx # Loading states
 │   │   ├── pages/
-│   │   │   └── Home.tsx         # Home page
+│   │   │   ├── Home.tsx         # Animated landing page
+│   │   │   └── Documentation.tsx # API documentation
 │   │   ├── utils/
-│   │   │   └── toast.ts         # Toast notifications
+│   │   │   └── toast.ts         # Enhanced toast system
 │   │   ├── App.tsx              # Main React application
 │   │   └── main.tsx             # React entry point
 │   ├── package.json             # Node.js dependencies
@@ -166,31 +193,45 @@ CREATE TABLE labels (
 
 ## 🚀 Usage
 
+### **Quick Start**
 1. **Access the application**
-
    - Frontend: http://localhost:5173
    - Backend API: http://localhost:8001
-   - API Documentation: http://localhost:8001/docs
+   - Interactive Docs: http://localhost:8001/docs
 
-2. **Upload Training Images**
+2. **User Authentication** (Optional)
+   - Sign up or login with demo credentials: `user` / `user123`
+   - Access profile settings and personalized experience
 
-   - Navigate to the Upload page
+### **Core Workflow**
+3. **Upload Training Images**
+   - Navigate to Upload page or use "Start Classifying" button
    - Drag and drop images or click to browse
-   - Add labels for your images
-   - Upload to build your training dataset
+   - Add labels for your images (auto-generated from filename)
+   - Preview images before upload
 
-3. **Train the Model**
+4. **Manage Training Data**
+   - Go to Models page to view uploaded and trained data
+   - Click eye icon or image thumbnails to view full image carousel
+   - Use search and filters to find specific models
+   - Select labels for training with visual preview
 
-   - Go to the Models page
-   - Select labels to include in training
-   - Click "Train Model" to start training
-   - Monitor training progress in real-time
+5. **Train Custom Models**
+   - Click "Train New Model" and select desired labels
+   - Monitor real-time training progress with status updates
+   - View training completion notifications
 
-4. **Test Predictions**
-   - Navigate to the Predict page
-   - Upload a test image
-   - View prediction results with confidence scores
-   - See matched training examples
+6. **Test & Predict**
+   - Navigate to Predict page
+   - Upload test images with drag-and-drop
+   - View predictions with confidence scores
+   - See similar training images with similarity matching
+
+### **Advanced Features**
+7. **Documentation & API**
+   - Access built-in documentation via "Read the Docs" button
+   - Browse comprehensive API reference with code examples
+   - Test endpoints directly from the interactive documentation
 
 ## 🔧 Configuration
 
@@ -265,10 +306,26 @@ docker-compose up frontend
 
 ## 📊 Tech Stack
 
-- **Backend**: FastAPI, Python, TensorFlow, MySQL
-- **Frontend**: React, TypeScript, Tailwind CSS, Vite
-- **Database**: MySQL
-- **ML Framework**: TensorFlow/Keras
-- **Image Processing**: PIL, OpenCV
-- **API Documentation**: Swagger/OpenAPI
-- **DevOps**: Docker, GitHub Actions, Prettier, EditorConfig
+### **Backend Architecture**
+- **Framework**: FastAPI with modular route structure
+- **Language**: Python 3.8+ with type hints
+- **ML Framework**: TensorFlow 2.x / Keras for CNN training
+- **Database**: MySQL 8.0+ with connection pooling
+- **Image Processing**: PIL, OpenCV for preprocessing
+- **Architecture**: Clean separation with services and routes
+
+### **Frontend Stack**
+- **Framework**: React 19 with TypeScript 5.9+
+- **Styling**: Tailwind CSS with custom components
+- **Build Tool**: Vite for fast development
+- **Animations**: Framer Motion for smooth transitions
+- **State Management**: React hooks with localStorage persistence
+- **UI Components**: Custom skeleton loaders and modals
+
+### **Development & DevOps**
+- **API Documentation**: Swagger/OpenAPI with interactive docs
+- **Containerization**: Docker with multi-stage builds
+- **Code Quality**: Prettier, EditorConfig, TypeScript strict mode
+- **CI/CD**: GitHub Actions for automated testing
+- **Authentication**: JWT-based user management
+- **Real-time Updates**: WebSocket-like polling for training status
