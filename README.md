@@ -23,7 +23,10 @@ A FastAPI-based web application for uploading images, labeling them, and trainin
 ## 📁 Project Structure
 
 ```
-local-image-classifier/
+automation-microservice-image-recognition/
+├── .github/
+│   └── workflows/
+│       └── ci.yml               # GitHub Actions CI/CD
 ├── backend/
 │   ├── app/
 │   │   ├── __init__.py
@@ -38,6 +41,8 @@ local-image-classifier/
 │   ├── model/                   # Trained models storage
 │   ├── uploads/                 # Temporary uploads
 │   ├── requirements.txt         # Python dependencies
+│   ├── Dockerfile               # Backend Docker configuration
+│   ├── .env                     # Environment variables
 │   └── .gitignore
 ├── frontend/
 │   ├── src/
@@ -55,10 +60,14 @@ local-image-classifier/
 │   ├── package.json             # Node.js dependencies
 │   ├── tsconfig.json            # TypeScript configuration
 │   ├── vite.config.ts           # Vite configuration
-│   └── tailwind.config.js       # Tailwind CSS configuration
+│   ├── tailwind.config.js       # Tailwind CSS configuration
+│   ├── Dockerfile               # Frontend Docker configuration
+│   └── .gitignore
+├── docker-compose.yml           # Docker Compose configuration
+├── .prettierrc                  # Prettier configuration
+├── .editorconfig                # Editor configuration
 ├── trained_data_table.sql       # Database schema
 └── README.md
-└── .env  # Environment variables
 ```
 
 ## 🛠️ Installation & Setup
@@ -75,7 +84,7 @@ local-image-classifier/
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd local-image-classifier
+   cd automation-microservice-image-recognition
    ```
 
 2. **Set up Python virtual environment**
@@ -221,6 +230,27 @@ DB_NAME=image_recognition
    - Clear node_modules and reinstall: `rm -rf node_modules && npm install`
    - Check Node.js version compatibility
 
+## 🐳 Docker Setup
+
+### Quick Start with Docker
+
+```bash
+# Clone and start all services
+git clone <repository-url>
+cd automation-microservice-image-recognition
+docker-compose up --build
+```
+
+### Individual Services
+
+```bash
+# Backend only
+docker-compose up backend mysql
+
+# Frontend only
+docker-compose up frontend
+```
+
 ## 📊 Tech Stack
 
 - **Backend**: FastAPI, Python, TensorFlow, MySQL
@@ -229,3 +259,4 @@ DB_NAME=image_recognition
 - **ML Framework**: TensorFlow/Keras
 - **Image Processing**: PIL, OpenCV
 - **API Documentation**: Swagger/OpenAPI
+- **DevOps**: Docker, GitHub Actions, Prettier, EditorConfig
