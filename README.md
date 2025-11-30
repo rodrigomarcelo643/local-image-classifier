@@ -1,4 +1,4 @@
-# Automation Microservice Image Recognition
+# Local Image Classifier
 
 ![Python](https://img.shields.io/badge/python-v3.8+-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-green.svg)
@@ -23,7 +23,7 @@ A FastAPI-based web application for uploading images, labeling them, and trainin
 ## 📁 Project Structure
 
 ```
-automation-microservice-image-recognition/
+local-image-classifier/
 ├── backend/
 │   ├── app/
 │   │   ├── __init__.py
