@@ -1,113 +1,71 @@
-from fastapi import FastAPI, UploadFile, File
-from fastapi.middleware.cors import CORSMiddleware
+import mysql.connector
 import os
-from .db import insert_image, insert_label, insert_model, link_image_model
-from .predict import predict
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Flatten, Conv2D, MaxPooling2D
-from tensorflow.keras.models import load_model
-import numpy as np
-from PIL import Image
+from dotenv import load_dotenv
 
-app = FastAPI(title="Local Image Classification API")
+load_dotenv()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+db = mysql.connector.connect(
+    host=os.getenv("MYSQL_HOST"),
+    user=os.getenv("MYSQL_USER"),
+    password=os.getenv("MYSQL_PASSWORD"),
+    database=os.getenv("MYSQL_DB")
 )
+cursor = db.cursor(buffered=True)
 
-BASE_DIR = "dataset"
-os.makedirs(BASE_DIR, exist_ok=True)
-MODEL_PATH = "model/latest_model.h5"
-os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
-
-
-# --- Save uploaded image to label folder ---
-def save_uploaded_image(file: UploadFile, label: str):
-    label_dir = os.path.join(BASE_DIR, label)
-    os.makedirs(label_dir, exist_ok=True)
-
-    file_path = os.path.join(label_dir, file.filename)
-    with open(file_path, "wb") as f:
-        f.write(file.file.read())
-    return file_path
-
-
-# --- Simple training function ---
-def train_model():
-    datagen = ImageDataGenerator(rescale=1./255, validation_split=0.2)
-    train_gen = datagen.flow_from_directory(
-        BASE_DIR,
-        target_size=(64, 64),
-        batch_size=32,
-        class_mode='categorical',
-        subset='training'
+def insert_image(filename, filepath):
+    cursor.execute(
+        "INSERT INTO images (filename, filepath) VALUES (%s, %s)",
+        (filename, filepath)
     )
-    val_gen = datagen.flow_from_directory(
-        BASE_DIR,
-        target_size=(64, 64),
-        batch_size=32,
-        class_mode='categorical',
-        subset='validation'
+    db.commit()
+    return cursor.lastrowid
+
+def insert_label(image_id, label):
+    cursor.execute(
+        "INSERT INTO labels (image_id, label) VALUES (%s, %s)",
+        (image_id, label)
     )
+    db.commit()
 
-    # Simple CNN model
-    model = Sequential([
-        Conv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 3)),
-        MaxPooling2D(2, 2),
-        Flatten(),
-        Dense(128, activation='relu'),
-        Dense(train_gen.num_classes, activation='softmax')
-    ])
-    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-    model.fit(train_gen, validation_data=val_gen, epochs=5)
+def insert_model(name, filepath):
+    cursor.execute(
+        "INSERT INTO models (name, filepath) VALUES (%s, %s)",
+        (name, filepath)
+    )
+    db.commit()
+    return cursor.lastrowid
 
-    model.save(MODEL_PATH)
-    model_id = insert_model("latest_model", MODEL_PATH)
+def link_image_model(model_id, image_id):
+    cursor.execute(
+        "INSERT INTO model_images (model_id, image_id) VALUES (%s, %s)",
+        (model_id, image_id)
+    )
+    db.commit()
 
-    # Link images to this new model
-    for label_folder in os.listdir(BASE_DIR):
-        folder_path = os.path.join(BASE_DIR, label_folder)
-        for img_file in os.listdir(folder_path):
-            image_id = insert_image(img_file, os.path.join(folder_path, img_file))
-            insert_label(image_id, label_folder)
-            link_image_model(model_id, image_id)
+def get_models():
+    cursor.execute("SELECT id, name, filepath, trained_at FROM models ORDER BY trained_at DESC")
+    models = []
+    for row in cursor.fetchall():
+        models.append({
+            "id": row[0],
+            "name": row[1],
+            "path": row[2],
+            "created_at": row[3].isoformat() if row[3] else None,
+            "status": "trained"
+        })
+    return models
 
-    return model
+def insert_trained_image(filename, filepath, model_id):
+    cursor.execute(
+        "INSERT INTO trained_images (filename, filepath, model_id) VALUES (%s, %s, %s)",
+        (filename, filepath, model_id)
+    )
+    db.commit()
+    return cursor.lastrowid
 
-
-# --- Upload endpoint ---
-@app.post("/upload")
-async def upload_image(file: UploadFile = File(...), label: str = None):
-    if not label:
-        label = os.path.splitext(file.filename)[0]  # use filename as label if none provided
-    file_path = save_uploaded_image(file, label)
-
-    # Update database
-    image_id = insert_image(file.filename, file_path)
-    insert_label(image_id, label)
-
-    # Train model automatically with new image
-    train_model()
-
-    return {"status": True, "image_id": image_id, "filename": file.filename, "label": label}
-
-
-# --- Predict endpoint ---
-@app.post("/predict")
-async def predict_image(file: UploadFile = File(...)):
-    file_path = os.path.join("uploads", file.filename)
-    os.makedirs("uploads", exist_ok=True)
-    with open(file_path, "wb") as f:
-        f.write(file.file.read())
-
-    label, confidence = predict(file_path)
-
-    # Insert into database
-    image_id = insert_image(file.filename, file_path)
-    insert_label(image_id, label)
-
-    return {"status": True, "prediction": label, "confidence": confidence}
+def insert_trained_label(trained_image_id, label):
+    cursor.execute(
+        "INSERT INTO trained_labels (trained_image_id, label) VALUES (%s, %s)",
+        (trained_image_id, label)
+    )
+    db.commit()

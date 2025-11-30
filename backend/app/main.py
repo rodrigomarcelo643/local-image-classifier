@@ -1,8 +1,12 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-import os
-from .db import insert_image, insert_label
-from .predict import predict
+
+from .config import DATASET_DIR
+from .routes.upload_routes import router as upload_router
+from .routes.prediction_routes import router as prediction_router
+from .routes.training_routes import router as training_router
+from .routes.data_routes import router as data_router
 
 app = FastAPI(title="Local Image Classification API")
 
@@ -13,32 +17,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-UPLOAD_DIR = "uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+# Serve static files
+app.mount("/static", StaticFiles(directory="dataset"), name="static")
 
-# --- Save uploaded image ---
-def save_uploaded_image(file: UploadFile):
-    file_path = os.path.join(UPLOAD_DIR, file.filename)
-    with open(file_path, "wb") as f:
-        f.write(file.file.read())
-    return file_path
-
-# --- Upload endpoint ---
-@app.post("/upload")
-async def upload_image(file: UploadFile = File(...), label: str = None):
-    file_path = save_uploaded_image(file)
-    image_id = insert_image(file.filename, file_path)
-    if label:
-        insert_label(image_id, label)
-    return {"status": True, "image_id": image_id, "filename": file.filename}
-
-# --- Predict endpoint ---
-@app.post("/predict")
-async def predict_image(file: UploadFile = File(...)):
-    file_path = save_uploaded_image(file)   
-    label, confidence = predict(file_path)
-
-    image_id = insert_image(file.filename, file_path)
-    insert_label(image_id, label)
-
-    return {"status": True, "prediction": label, "confidence": confidence}
+# Include routers
+app.include_router(upload_router)
+app.include_router(prediction_router)
+app.include_router(training_router)
+app.include_router(data_router)
