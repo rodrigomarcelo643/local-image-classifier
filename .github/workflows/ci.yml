@@ -68,6 +68,11 @@ jobs:
         cd frontend
         npm run lint
         
+    - name: Run tests
+      run: |
+        cd frontend
+        npm run test
+        
     - name: Run type check
       run: |
         cd frontend
