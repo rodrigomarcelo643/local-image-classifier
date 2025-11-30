@@ -1,4 +1,4 @@
-# Local Image Classifier
+# Local Vision ML Image Classifier
 
 ![Python](https://img.shields.io/badge/python-v3.8+-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-green.svg)
@@ -23,7 +23,7 @@ A FastAPI-based web application for uploading images, labeling them, and trainin
 ## 📁 Project Structure
 
 ```
-automation-microservice-image-recognition/
+local-vision-ml-image-classifier/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml               # GitHub Actions CI/CD
@@ -82,12 +82,14 @@ automation-microservice-image-recognition/
 ### Backend Setup
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd automation-microservice-image-recognition
    ```
 
 2. **Set up Python virtual environment**
+
    ```bash
    cd backend
    python -m venv venv
@@ -95,17 +97,20 @@ automation-microservice-image-recognition/
    ```
 
 3. **Install Python dependencies**
+
    ```bash
    pip install -r requirements.txt
    ```
 
 4. **Configure environment variables**
+
    ```bash
    cp .env.example .env
    # Edit .env with your database credentials
    ```
 
 5. **Set up MySQL database**
+
    ```sql
    CREATE DATABASE image_recognition;
    -- Run the SQL commands from trained_data_table.sql
@@ -119,11 +124,13 @@ automation-microservice-image-recognition/
 ### Frontend Setup
 
 1. **Navigate to frontend directory**
+
    ```bash
    cd frontend
    ```
 
 2. **Install Node.js dependencies**
+
    ```bash
    npm install
    ```
@@ -160,17 +167,20 @@ CREATE TABLE labels (
 ## 🚀 Usage
 
 1. **Access the application**
+
    - Frontend: http://localhost:5173
    - Backend API: http://localhost:8001
    - API Documentation: http://localhost:8001/docs
 
 2. **Upload Training Images**
+
    - Navigate to the Upload page
    - Drag and drop images or click to browse
    - Add labels for your images
    - Upload to build your training dataset
 
 3. **Train the Model**
+
    - Go to the Models page
    - Select labels to include in training
    - Click "Train Model" to start training
@@ -217,11 +227,13 @@ DB_NAME=image_recognition
 ### Common Issues
 
 1. **Database Connection Error**
+
    - Verify MySQL is running
    - Check database credentials in .env file
    - Ensure database exists
 
 2. **Model Training Fails**
+
    - Check if training images exist in dataset/train/
    - Verify sufficient training data (minimum 2 images per class)
    - Check Python dependencies are installed
