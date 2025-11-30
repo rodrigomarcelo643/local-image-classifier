@@ -12,6 +12,7 @@ A FastAPI-based web application for uploading images, labeling them, and trainin
 ## 🚀 Features
 
 ### **Core ML Capabilities**
+
 - **Image Upload & Labeling**: Drag-and-drop interface with automatic or manual labeling
 - **CNN Model Training**: Train custom image classification models locally with real-time progress
 - **Smart Predictions**: Test models with confidence scores and similarity matching
@@ -19,6 +20,7 @@ A FastAPI-based web application for uploading images, labeling them, and trainin
 - **Advanced Search & Filtering**: Search models by name, path, classes, or status
 
 ### **User Experience**
+
 - **Authentication System**: User login/signup with profile management and avatar support
 - **Interactive Documentation**: Built-in API documentation with responsive sidebar navigation
 - **Real-time Status**: Live training progress tracking with polling updates
@@ -26,6 +28,7 @@ A FastAPI-based web application for uploading images, labeling them, and trainin
 - **Responsive Design**: Mobile-friendly interface with skeleton loading states
 
 ### **Technical Architecture**
+
 - **Modular Backend**: Clean separation of concerns with services and routes
 - **Database Integration**: MySQL with trained/uploaded data management
 - **RESTful API**: FastAPI with automatic OpenAPI documentation
@@ -34,7 +37,7 @@ A FastAPI-based web application for uploading images, labeling them, and trainin
 ## 📁 Project Structure
 
 ```
-automation-microservice-image-recognition/
+local-vision-ml-image-classifier/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml               # GitHub Actions CI/CD
@@ -194,7 +197,9 @@ CREATE TABLE labels (
 ## 🚀 Usage
 
 ### **Quick Start**
+
 1. **Access the application**
+
    - Frontend: http://localhost:5173
    - Backend API: http://localhost:8001
    - Interactive Docs: http://localhost:8001/docs
@@ -204,19 +209,23 @@ CREATE TABLE labels (
    - Access profile settings and personalized experience
 
 ### **Core Workflow**
+
 3. **Upload Training Images**
+
    - Navigate to Upload page or use "Start Classifying" button
    - Drag and drop images or click to browse
    - Add labels for your images (auto-generated from filename)
    - Preview images before upload
 
 4. **Manage Training Data**
+
    - Go to Models page to view uploaded and trained data
    - Click eye icon or image thumbnails to view full image carousel
    - Use search and filters to find specific models
    - Select labels for training with visual preview
 
 5. **Train Custom Models**
+
    - Click "Train New Model" and select desired labels
    - Monitor real-time training progress with status updates
    - View training completion notifications
@@ -228,6 +237,7 @@ CREATE TABLE labels (
    - See similar training images with similarity matching
 
 ### **Advanced Features**
+
 7. **Documentation & API**
    - Access built-in documentation via "Read the Docs" button
    - Browse comprehensive API reference with code examples
@@ -307,6 +317,7 @@ docker-compose up frontend
 ## 📊 Tech Stack
 
 ### **Backend Architecture**
+
 - **Framework**: FastAPI with modular route structure
 - **Language**: Python 3.8+ with type hints
 - **ML Framework**: TensorFlow 2.x / Keras for CNN training
@@ -315,6 +326,7 @@ docker-compose up frontend
 - **Architecture**: Clean separation with services and routes
 
 ### **Frontend Stack**
+
 - **Framework**: React 19 with TypeScript 5.9+
 - **Styling**: Tailwind CSS with custom components
 - **Build Tool**: Vite for fast development
@@ -323,6 +335,7 @@ docker-compose up frontend
 - **UI Components**: Custom skeleton loaders and modals
 
 ### **Development & DevOps**
+
 - **API Documentation**: Swagger/OpenAPI with interactive docs
 - **Containerization**: Docker with multi-stage builds
 - **Code Quality**: Prettier, EditorConfig, TypeScript strict mode
