@@ -38,7 +38,6 @@ local-image-classifier/
 │   ├── model/                   # Trained models storage
 │   ├── uploads/                 # Temporary uploads
 │   ├── requirements.txt         # Python dependencies
-│   ├── .env                     # Environment variables
 │   └── .gitignore
 ├── frontend/
 │   ├── src/
@@ -59,6 +58,7 @@ local-image-classifier/
 │   └── tailwind.config.js       # Tailwind CSS configuration
 ├── trained_data_table.sql       # Database schema
 └── README.md
+└── .env  # Environment variables
 ```
 
 ## 🛠️ Installation & Setup
