@@ -7,7 +7,7 @@ import {
   closeToast,
   genericToasts 
 } from "../utils/toast";
-import SkeletonLoader from "./SkeletonLoader";
+
 import { API_BASE_URL } from "../config/api";
 
 interface PredictResponse {
@@ -29,15 +29,11 @@ export default function PredictForm() {
   const [dragActive, setDragActive] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [availableLabels, setAvailableLabels] = useState<string[]>([]);
-  const [trainingData, setTrainingData] = useState<unknown[]>([]);
-  const [uploadedData, setUploadedData] = useState<unknown[]>([]);
-  const [hasTrainedModel, setHasTrainedModel] = useState(false);
-  const [dataLoading, setDataLoading] = useState(true);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchLabels();
-    fetchTrainingData();
   }, []);
 
   const fetchLabels = async () => {
@@ -49,24 +45,7 @@ export default function PredictForm() {
     }
   };
 
-  const fetchTrainingData = async () => {
-    try {
-      setDataLoading(true);
-      const [trainingRes, uploadedRes, modelsRes] = await Promise.all([
-        axios.get(`${API_BASE_URL}/training-data`),
-        axios.get(`${API_BASE_URL}/uploaded-data`),
-        axios.get(`${API_BASE_URL}/models`)
-      ]);
-      
-      setTrainingData(trainingRes.data.training_data || []);
-      setUploadedData(uploadedRes.data.uploaded_data || []);
-      setHasTrainedModel((modelsRes.data.models || []).length > 0);
-    } catch (err) {
-      console.error('Failed to fetch data:', err);
-    } finally {
-      setDataLoading(false);
-    }
-  };
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
