@@ -75,7 +75,7 @@ export default function ProfilePage({ user, onUpdateUser }: ProfilePageProps) {
                 ) : (
                   <div className="w-full h-full bg-green-100 flex items-center justify-center">
                     <span className="text-green-600 font-semibold text-xl">
-                      {formData.name.charAt(0).toUpperCase()}
+                      {formData.name?.charAt(0).toUpperCase() || 'U'}
                     </span>
                   </div>
                 )}

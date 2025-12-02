@@ -75,7 +75,7 @@ export default function UserAvatar({ user, onLogout }: UserAvatarProps) {
         ) : (
           <div className="w-full h-full bg-green-100 flex items-center justify-center">
             <span className="text-green-600 font-semibold text-sm">
-              {user.name.charAt(0).toUpperCase()}
+              {user.name?.charAt(0).toUpperCase() || 'U'}
             </span>
           </div>
         )}
@@ -96,7 +96,7 @@ export default function UserAvatar({ user, onLogout }: UserAvatarProps) {
                 ) : (
                   <div className="w-full h-full bg-green-100 flex items-center justify-center">
                     <span className="text-green-600 font-semibold">
-                      {user.name.charAt(0).toUpperCase()}
+                      {user.name?.charAt(0).toUpperCase() || 'U'}
                     </span>
                   </div>
                 )}

@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "r
 import { Toaster } from "react-hot-toast";
 import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import UploadForm from "./components/UploadForm";
 import PredictForm from "./components/PredictForm";
@@ -50,10 +51,10 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-green-50 to-emerald-100">
+    <div className="min-h-screen bg-linear-to-br from-green-50 to-emerald-100 flex flex-col">
       {!isAuthPage && !isDocsPage && <Navbar user={user} onLogout={handleLogout} />}
 
-      <main className={isAuthPage || isDocsPage ? "" : "container mx-auto px-4 py-8"}>
+      <main className={`flex-1 ${isAuthPage || isDocsPage ? "" : "container mx-auto px-4 py-8"}`}>
           <Routes>
             <Route path="/login" element={
               user ? <Navigate to="/" replace /> : <LoginForm onLogin={handleLogin} />
@@ -74,6 +75,8 @@ function AppContent() {
             <Route path="/docs" element={<Documentation />} />
           </Routes>
       </main>
+
+      {!isAuthPage && !isDocsPage && <Footer />}
     </div>
   );
 }
