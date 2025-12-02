@@ -3,7 +3,6 @@ import axios from "axios";
 import type { AxiosResponse } from "axios";
 import { 
   fileToasts, 
-  showPromise, 
   showLoading, 
   closeToast,
   genericToasts 
@@ -21,7 +20,7 @@ export default function UploadForm() {
   const [label, setLabel] = useState<string>("");
   const [uploadResult, setUploadResult] = useState<UploadResponse | null>(null);
   const [loading, setLoading] = useState(false);
-  const [training, setTraining] = useState(false);
+  const [training] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -93,54 +92,6 @@ export default function UploadForm() {
     }
   };
 
-  /** 
-  const handleUploadWithPromise = async () => {
-    if (!file) {
-      fileToasts.noFile();
-      return;
-    }
-    if (!label.trim()) {
-      fileToasts.noLabel();
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("label", label.trim());
-
-    try {
-      const uploadPromise = axios.post(
-        "http://localhost:8001/upload",
-        formData,
-        { 
-          headers: { "Content-Type": "multipart/form-data" },
-          timeout: 30000
-        }
-      );
-
-      await showPromise(
-        uploadPromise,
-        {
-          loading: 'Uploading image...',
-          success: 'Image uploaded successfully!',
-          error: 'Upload failed. Please try again.'
-        }
-      );
-
-      const response = await uploadPromise;
-      setUploadResult(response.data);
-      setFile(null);
-      setLabel("");
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    } catch (err) {
-      // Error is handled by showPromise
-      console.error('Upload error:', err);
-    }
-  };
-*/
-  // Manual Loading State when Uploading 
   const handleUpload = async () => {
     if (!file) {
       fileToasts.noFile();
@@ -180,15 +131,17 @@ export default function UploadForm() {
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       closeToast(loadingToastId);
       
-      if (err.code === 'ECONNABORTED') {
+      const error = err as { code?: string; response?: { data?: { message?: string } }; request?: unknown };
+      
+      if (error.code === 'ECONNABORTED') {
         genericToasts.error('Request timeout. Please try again.');
-      } else if (err.response) {
-        genericToasts.error(`Upload failed: ${err.response.data?.message || 'Server error'}`);
-      } else if (err.request) {
+      } else if (error.response) {
+        genericToasts.error(`Upload failed: ${error.response.data?.message || 'Server error'}`);
+      } else if (error.request) {
         fileToasts.networkError();
       } else {
         genericToasts.error('An unexpected error occurred. Please try again.');
@@ -210,42 +163,6 @@ export default function UploadForm() {
     }
     fileToasts.removed();
   };
-
-
-
-  /** const handleTrainModel = async () => {
-    let loadingToastId: string | undefined;
-
-    try {
-      setTraining(true);
-      loadingToastId = showLoading('Training model with uploaded images...');
-      
-      const response = await axios.post(
-        "http://localhost:8001/train",
-        {},
-        { timeout: 30000 }
-      );
-
-      dismissToast(loadingToastId);
-      genericToasts.success('Model training started successfully!');
-    } catch (err: any) {
-      console.error(err);
-      dismissToast(loadingToastId);
-      
-      if (err.code === 'ECONNABORTED') {
-        genericToasts.error('Request timeout. Please try again.');
-      } else if (err.response) {
-        genericToasts.error(`Training failed: ${err.response.data?.message || 'Server error'}`);
-      } else if (err.request) {
-        genericToasts.error('Network error. Please check if the backend server is running.');
-      } else {
-        genericToasts.error('An unexpected error occurred. Please try again.');
-      }
-    } finally {
-      setTraining(false);
-    }
-  };
-  */ 
 
   return (
     <>

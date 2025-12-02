@@ -88,7 +88,7 @@ cd automation-microservice-image-recognition
 # Set up Python virtual environment
 cd backend
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\\Scripts\\activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
@@ -328,64 +328,66 @@ export default function Documentation() {
         </main>
       </div>
 
-      <style jsx>{`
-        .markdown-content h1 {
-          font-size: 2rem;
-          font-weight: bold;
-          margin: 2rem 0 1rem 0;
-          color: #1f2937;
-        }
-        .markdown-content h2 {
-          font-size: 1.5rem;
-          font-weight: 600;
-          margin: 1.5rem 0 0.75rem 0;
-          color: #374151;
-        }
-        .markdown-content h3 {
-          font-size: 1.25rem;
-          font-weight: 600;
-          margin: 1rem 0 0.5rem 0;
-          color: #4b5563;
-        }
-        .markdown-content p {
-          margin: 1rem 0;
-          line-height: 1.6;
-          color: #6b7280;
-        }
-        .markdown-content pre {
-          background: #f3f4f6;
-          border: 1px solid #e5e7eb;
-          border-radius: 0.5rem;
-          padding: 1rem;
-          overflow-x: auto;
-          margin: 1rem 0;
-        }
-        .markdown-content code {
-          background: #f3f4f6;
-          padding: 0.125rem 0.25rem;
-          border-radius: 0.25rem;
-          font-family: 'Monaco', 'Consolas', monospace;
-          font-size: 0.875rem;
-        }
-        .markdown-content .inline-code {
-          background: #f3f4f6;
-          color: #dc2626;
-          padding: 0.125rem 0.25rem;
-          border-radius: 0.25rem;
-        }
-        .markdown-content li {
-          margin: 0.5rem 0;
-          padding-left: 1rem;
-          position: relative;
-        }
-        .markdown-content li:before {
-          content: "•";
-          color: #10b981;
-          font-weight: bold;
-          position: absolute;
-          left: 0;
-        }
-      `}</style>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          .markdown-content h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 2rem 0 1rem 0;
+            color: #1f2937;
+          }
+          .markdown-content h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem 0;
+            color: #374151;
+          }
+          .markdown-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 1rem 0 0.5rem 0;
+            color: #4b5563;
+          }
+          .markdown-content p {
+            margin: 1rem 0;
+            line-height: 1.6;
+            color: #6b7280;
+          }
+          .markdown-content pre {
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+          }
+          .markdown-content code {
+            background: #f3f4f6;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.875rem;
+          }
+          .markdown-content .inline-code {
+            background: #f3f4f6;
+            color: #dc2626;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+          }
+          .markdown-content li {
+            margin: 0.5rem 0;
+            padding-left: 1rem;
+            position: relative;
+          }
+          .markdown-content li:before {
+            content: "•";
+            color: #10b981;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+          }
+        `
+      }} />
     </div>
   );
 }

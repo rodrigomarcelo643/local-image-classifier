@@ -25,7 +25,7 @@ export const showLoading = (message: string): string => {
 
 // Promise toast (for async operations)
 export const showPromise = (
-  promise: Promise<any>,
+  promise: Promise<unknown>,
   messages: {
     loading: string;
     success: string;

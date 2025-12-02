@@ -9,7 +9,7 @@ const stats = [
 
 export default function StatsSection() {
   return (
-    <section className="py-16 mt-5 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600">
+    <section className="py-16 mt-5 rounded-xl bg-linear-to-r from-green-600 to-emerald-600">
       <div className="max-w-7xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

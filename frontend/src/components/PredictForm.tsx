@@ -28,7 +28,7 @@ export default function PredictForm() {
   const [dragActive, setDragActive] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [availableLabels, setAvailableLabels] = useState<string[]>([]);
-  const [sampleImages, setSampleImages] = useState<SampleImage[]>([]);
+
   const [trainingData, setTrainingData] = useState<any[]>([]);
   const [uploadedData, setUploadedData] = useState<any[]>([]);
   const [hasTrainedModel, setHasTrainedModel] = useState(false);
@@ -68,22 +68,7 @@ export default function PredictForm() {
     }
   };
 
-  const fetchSampleImages = async (label: string) => {
-    try {
-      // Try to get training images first (from trained data)
-      const response = await axios.get(`http://localhost:8001/training-images/${encodeURIComponent(label)}`);
-      if (response.data.images && response.data.images.length > 0) {
-        setSampleImages(response.data.images || []);
-      } else {
-        // Fallback to sample images if no training images found
-        const fallbackResponse = await axios.get(`http://localhost:8001/sample-images/${encodeURIComponent(label)}`);
-        setSampleImages(fallbackResponse.data.images || []);
-      }
-    } catch (err) {
-      console.error('Failed to fetch sample images:', err);
-      setSampleImages([]);
-    }
-  };
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -202,7 +187,7 @@ export default function PredictForm() {
     setFile(null);
     setImagePreview(null);
     setResult(null);
-    setSampleImages([]);
+
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
