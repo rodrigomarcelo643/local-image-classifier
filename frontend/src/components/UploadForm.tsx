@@ -7,6 +7,7 @@ import {
   closeToast,
   genericToasts 
 } from "../utils/toast";
+import { API_BASE_URL } from "../config/api";
 
 interface UploadResponse {
   status: boolean;
@@ -113,7 +114,7 @@ export default function UploadForm() {
       loadingToastId = showLoading('Uploading image...');
       
       const response: AxiosResponse<UploadResponse> = await axios.post(
-        "http://localhost:8001/upload",
+        `${API_BASE_URL}/upload`,
         formData,
         { 
           headers: { "Content-Type": "multipart/form-data" },
